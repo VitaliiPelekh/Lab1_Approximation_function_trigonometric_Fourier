@@ -1,0 +1,1 @@
+# Lab1_Approximation_function_trigonometric_Fourier
