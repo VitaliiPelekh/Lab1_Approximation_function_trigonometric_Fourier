@@ -6,22 +6,26 @@ import warnings
 from scipy.integrate import IntegrationWarning
 
 
+# Задана функція
 def f_x(x):
     return x**20 * np.exp(-x**2 / 20)
 
 
+# Обчислення коєфіцієнтів a_k ряду Фур'є
 def a_coefficient(k):
     def integrand(x):
         return f_x(x) * np.cos(k * x)
     return (1 / np.pi) * quad(integrand, -np.pi, np.pi)[0]
 
 
+# Обчислення коєфіцієнтів b_k ряду Фур'є
 def b_coefficient(k):
     def integrand(x):
         return f_x(x) * np.sin(k * x)
     return (1 / np.pi) * quad(integrand, -np.pi, np.pi)[0]
 
 
+# Обчислення ряду Фур'є
 def fourier_series_approximation(x, N):
     sum_a = a_coefficient(0) / 2
     sum_b = 0
@@ -31,10 +35,12 @@ def fourier_series_approximation(x, N):
     return sum_a + sum_b
 
 
+# Похибка наближення
 def relative_error(x, N):
     return np.abs((f_x(x) - fourier_series_approximation(x, N)) / f_x(x))
 
 
+# Вивід результатів у файл
 def save_results(N):
     a_coeffs = [a_coefficient(k) for k in range(N + 1)]
     b_coeffs = [b_coefficient(k) for k in range(1, N + 1)]
@@ -52,6 +58,7 @@ def save_results(N):
                 f.write(f'  {k:<4}    {a_k_str:<20}{b_k_str:<12}\n')
 
 
+# Вивід результатів у консоль
 def print_results(N):
     print("Обчислення наближеня за допомогою ряду Фур'є значення функції x^20 * e^(-x^2 / 20)\n")
     print(f"Порядок N = {N}\n")
@@ -67,6 +74,7 @@ def print_results(N):
     print(f"\nПохибка наближення: {error:.4e}")
 
 
+# Гармоніки
 def plot_harmonics(N):
     x = np.linspace(-np.pi, np.pi, 1000)
     for k in range(N + 1):
@@ -78,6 +86,7 @@ def plot_harmonics(N):
     plt.show()
 
 
+# Коефіцієнти Фур'є
 def plot_coefficients(N):
     a_coeffs = [a_coefficient(k) for k in range(N + 1)]
     b_coeffs = [b_coefficient(k) for k in range(1, N + 1)]
@@ -91,6 +100,7 @@ def plot_coefficients(N):
     plt.show()
 
 
+# Послідовне наближення
 def plot_sequential_approximation(x, N):
     plt.figure()
     plt.plot(x, f_x(x), label='f(x)', linewidth=2)
@@ -105,6 +115,7 @@ def plot_sequential_approximation(x, N):
     plt.show()
 
 
+# Похибка наближення
 def plot_relative_error(x, N):
     errors = [relative_error(val, N) for val in x]
 
@@ -115,6 +126,7 @@ def plot_relative_error(x, N):
     plt.show()
 
 
+# Функція та наближення Фур'є
 def plot_function_and_approximation(x, N):
     plt.figure()
     plt.plot(x, f_x(x), label='f(x)', linewidth=2)
