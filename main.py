@@ -102,15 +102,28 @@ def plot_coefficients(N):
 
 # Послідовне наближення
 def plot_sequential_approximation(x, N):
-    plt.figure()
-    plt.plot(x, f_x(x), label='f(x)', linewidth=2)
+    fig, ax1 = plt.subplots(figsize=(6, 4))
 
-    for i in [int(N * 0.25), int(N * 0.5), N]:
-        plt.plot(x, fourier_series_approximation(x, i), label=f'N = {i}', linestyle='--')
+    # Plot f(x) on the first y-axis
+    ax1.plot(x, f_x(x), label='f(x)', linewidth=2)
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('f(x)', color='C0')
+    ax1.tick_params(axis='y', labelcolor='C0')
 
-    plt.legend()
-    plt.xlabel('x')
-    plt.ylabel('f(x)')
+    # Create a second y-axis
+    ax2 = ax1.twinx()
+
+    # Plot Fourier series approximations on the second y-axis
+    for i, color in zip([int(N * 0.25), int(N * 0.5), N], ['C1', 'C2', 'C3']):
+        ax2.plot(x, fourier_series_approximation(x, i), label=f'N = {i}', linestyle='--', color=color)
+    ax2.set_ylabel('Fourier series approximations', color='C3')
+    ax2.tick_params(axis='y', labelcolor='C3')
+
+    # Combine legends of both axes
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax2.legend(lines1 + lines2, labels1 + labels2, loc='best')
+
     plt.title('Sequential Fourier Series Approximations')
     plt.show()
 
@@ -128,19 +141,33 @@ def plot_relative_error(x, N):
 
 # Функція та наближення Фур'є
 def plot_function_and_approximation(x, N):
-    plt.figure()
-    plt.plot(x, f_x(x), label='f(x)', linewidth=2)
-    plt.plot(x, fourier_series_approximation(x, N), label=f'Approximation N = {N}', linestyle='--')
+    fig, ax1 = plt.subplots(figsize=(6, 4))
 
-    plt.legend()
-    plt.xlabel('x')
-    plt.ylabel('f(x)')
+    # Plot f(x) on the first y-axis
+    ax1.plot(x, f_x(x), label='f(x)', linewidth=2)
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('f(x)', color='C0')
+    ax1.tick_params(axis='y', labelcolor='C0')
+
+    # Create a second y-axis
+    ax2 = ax1.twinx()
+
+    # Plot Fourier series approximation on the second y-axis
+    ax2.plot(x, fourier_series_approximation(x, N), label=f'Approximation N = {N}', linestyle='--', color='C1')
+    ax2.set_ylabel('Fourier series approximation', color='C1')
+    ax2.tick_params(axis='y', labelcolor='C1')
+
+    # Combine legends of both axes
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax2.legend(lines1 + lines2, labels1 + labels2, loc='best')
+
     plt.title('Function f(x) and Fourier Series Approximation')
     plt.show()
 
 
 def main(N):
-    x = np.linspace(-np.pi, np.pi, 1000)
+    x = np.linspace(-3*np.pi, 3*np.pi, 1000)
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", IntegrationWarning)
